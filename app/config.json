@@ -1,6 +1,9 @@
 {
   "resources": {
     "models": {
+      "airship" : {
+        "path" : "airship/CUPIC_AIRSHIP.obj"
+      }
     }
   },
   "window": {
