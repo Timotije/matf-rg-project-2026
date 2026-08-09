@@ -10,6 +10,10 @@ namespace app {
 
         void draw_airship();
 
+        void update_camera();
+
+        void update() override;
+
         void begin_draw() override;
 
         void draw() override;
