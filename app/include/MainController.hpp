@@ -8,7 +8,11 @@ namespace app {
 
         bool loop() override;
 
-        void draw_airship();
+        void draw_island();
+
+        void draw_lighthouse();
+
+        void draw_airballoon();
 
         void update_camera();
 

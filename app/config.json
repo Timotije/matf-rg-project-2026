@@ -1,8 +1,14 @@
 {
   "resources": {
     "models": {
-      "airship" : {
-        "path" : "airship/CUPIC_AIRSHIP.obj"
+      "island" : {
+        "path" : "floating_island/scene.gltf"
+      },
+      "lighthouse" : {
+        "path" : "lighthouse/Lighthouse.obj"
+      },
+      "airballoon" : {
+        "path" : "airballoon/1389_Hot_Air_Balloon.obj"
       }
     }
   },

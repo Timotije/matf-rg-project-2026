@@ -32,10 +32,10 @@ namespace app {
         return true;
     }
 
-    void MainController::draw_airship() {
+    void MainController::draw_island() {
         auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
         auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
-        engine::resources::Model* airship = resources->model("airship");
+        engine::resources::Model* island = resources->model("island");
 
         engine::resources::Shader* shader = resources->shader("basic");
 
@@ -43,11 +43,47 @@ namespace app {
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, -10.0f));
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
         model = glm::scale(model, glm::vec3(0.03f));
         shader->set_mat4("model", model);
 
-        airship->draw(shader);
+        island->draw(shader);
+    }
+
+    void MainController::draw_lighthouse() {
+        auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+        auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+        engine::resources::Model* lighthouse = resources->model("lighthouse");
+
+        engine::resources::Shader* shader = resources->shader("basic");
+
+        shader->use();
+        shader->set_mat4("projection", graphics->projection_matrix());
+        shader->set_mat4("view", graphics->camera()->view_matrix());
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, 0.65f, -5.0f));
+        model = glm::scale(model, glm::vec3(0.1f));
+        shader->set_mat4("model", model);
+
+        lighthouse->draw(shader);
+    }
+
+    void MainController::draw_airballoon() {
+        auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+        auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+        engine::resources::Model* airballoon = resources->model("airballoon");
+
+        engine::resources::Shader* shader = resources->shader("basic");
+
+        shader->use();
+        shader->set_mat4("projection", graphics->projection_matrix());
+        shader->set_mat4("view", graphics->camera()->view_matrix());
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, 2.0f, -7.0f));
+        model = glm::scale(model, glm::vec3(0.03f));
+        shader->set_mat4("model", model);
+
+        airballoon->draw(shader);
     }
 
     void MainController::update_camera() {
@@ -84,7 +120,9 @@ namespace app {
     }
 
     void MainController::draw() {
-        draw_airship();
+        draw_island();
+        draw_lighthouse();
+        draw_airballoon();
     }
 
     void MainController::end_draw() {
