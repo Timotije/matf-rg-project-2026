@@ -33,6 +33,7 @@ namespace app {
         if (platform->key(engine::platform::KeyId::KEY_ESCAPE).is_down()) {
             return false;
         }
+        platform->set_enable_cursor(false);
         return true;
     }
 
@@ -41,9 +42,20 @@ namespace app {
         auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
         engine::resources::Model* island = resources->model("island");
 
-        engine::resources::Shader* shader = resources->shader("basic");
+        engine::resources::Shader* shader = resources->shader("multiple_lights");
 
         shader->use();
+        shader->set_int("material.diffuse", 0);
+        shader->set_int("material.specular", 1);
+
+        shader->set_vec3("viewPos", graphics->camera()->Position);
+        shader->set_float("material.shininess", 64.0f);
+
+        shader->set_vec3("dirLight.direction", glm::vec3(0.7f, -1.0f, -0.7f));
+        shader->set_vec3("dirLight.ambient", glm::vec3( 0.15f, 0.15f, 0.15f));
+        shader->set_vec3("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
+        shader->set_vec3("dirLight.specular", glm::vec3(0.2f, 0.2f, 0.2f));
+
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
         glm::mat4 model = glm::mat4(1.0f);
@@ -59,9 +71,20 @@ namespace app {
         auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
         engine::resources::Model* lighthouse = resources->model("lighthouse");
 
-        engine::resources::Shader* shader = resources->shader("basic");
+        engine::resources::Shader* shader = resources->shader("multiple_lights");
 
         shader->use();
+        shader->set_int("material.diffuse", 0);
+        shader->set_int("material.specular", 1);
+
+        shader->set_vec3("viewPos", graphics->camera()->Position);
+        shader->set_float("material.shininess", 64.0f);
+
+        shader->set_vec3("dirLight.direction", glm::vec3(0.7f, -1.0f, -0.7f));
+        shader->set_vec3("dirLight.ambient", glm::vec3( 0.15f, 0.15f, 0.15f));
+        shader->set_vec3("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
+        shader->set_vec3("dirLight.specular", glm::vec3(0.2f, 0.2f, 0.2f));
+
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
         glm::mat4 model = glm::mat4(1.0f);
@@ -77,9 +100,20 @@ namespace app {
         auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
         engine::resources::Model* airballoon = resources->model("airballoon");
 
-        engine::resources::Shader* shader = resources->shader("basic");
+        engine::resources::Shader* shader = resources->shader("multiple_lights");
 
         shader->use();
+        shader->set_int("material.diffuse", 0);
+        shader->set_int("material.specular", 1);
+
+        shader->set_vec3("viewPos", graphics->camera()->Position);
+        shader->set_float("material.shininess", 64.0f);
+
+        shader->set_vec3("dirLight.direction", glm::vec3(0.7f, -1.0f, -0.7f));
+        shader->set_vec3("dirLight.ambient", glm::vec3( 0.15f, 0.15f, 0.15f));
+        shader->set_vec3("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
+        shader->set_vec3("dirLight.specular", glm::vec3(0.2f, 0.2f, 0.2f));
+
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
         glm::mat4 model = glm::mat4(1.0f);
