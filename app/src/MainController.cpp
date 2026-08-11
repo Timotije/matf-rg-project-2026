@@ -85,6 +85,17 @@ namespace app {
         shader->set_vec3("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
         shader->set_vec3("dirLight.specular", glm::vec3(0.2f, 0.2f, 0.2f));
 
+        shader->set_vec3("spotLight.position", glm::vec3(-0.212f, 2.032f, -5.129f));
+        shader->set_vec3("spotLight.direction", glm::vec3(0.0f, 0.0f, -1.0f));
+        shader->set_vec3("spotLight.ambient", glm::vec3(0.0f, 0.0f, 0.0f));
+        shader->set_vec3("spotLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
+        shader->set_vec3("spotLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+        shader->set_float("spotLight.constant", 1.0f);
+        shader->set_float("spotLight.linear", 0.09);
+        shader->set_float("spotLight.quadratic", 0.032);
+        shader->set_float("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+        shader->set_float("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
+
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
         glm::mat4 model = glm::mat4(1.0f);
