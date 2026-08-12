@@ -69,6 +69,7 @@ namespace app {
     void MainController::draw_lighthouse() {
         auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
         auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+        auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
         engine::resources::Model* lighthouse = resources->model("lighthouse");
 
         engine::resources::Shader* shader = resources->shader("multiple_lights");
@@ -85,8 +86,11 @@ namespace app {
         shader->set_vec3("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
         shader->set_vec3("dirLight.specular", glm::vec3(0.2f, 0.2f, 0.2f));
 
-        shader->set_vec3("spotLight.position", glm::vec3(-0.212f, 2.032f, -5.129f));
-        shader->set_vec3("spotLight.direction", glm::vec3(0.0f, 0.0f, -1.0f));
+        shader->set_vec3("spotLight.position", glm::vec3(
+            -0.0036 * cos(platform->frame_time().current),
+            2.0f,
+            -5.0 + (-0.0067 * sin(platform->frame_time().current))));
+        shader->set_vec3("spotLight.direction", glm::vec3(cos(platform->frame_time().current), 0.0f, sin(platform->frame_time().current)));
         shader->set_vec3("spotLight.ambient", glm::vec3(0.0f, 0.0f, 0.0f));
         shader->set_vec3("spotLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
         shader->set_vec3("spotLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
@@ -109,6 +113,7 @@ namespace app {
     void MainController::draw_airballoon() {
         auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
         auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+        auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
         engine::resources::Model* airballoon = resources->model("airballoon");
 
         engine::resources::Shader* shader = resources->shader("multiple_lights");
@@ -128,7 +133,10 @@ namespace app {
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 2.0f, -7.0f));
+        model = glm::translate(model, glm::vec3(
+            2.0 * cos(platform->frame_time().current),
+            2.0f,
+            -5.0 + 2.0 * sin(platform->frame_time().current)));
         model = glm::scale(model, glm::vec3(0.03f));
         shader->set_mat4("model", model);
 
