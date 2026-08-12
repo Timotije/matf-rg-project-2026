@@ -12,6 +12,7 @@ namespace app {
     void GUIController::poll_events() {
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
         if (platform->key(engine::platform::KeyId::KEY_F2).state() == engine::platform::Key::State::JustPressed) {
+            platform->set_enable_cursor(!is_enabled());
             set_enable(!is_enabled());
         }
     }
@@ -23,6 +24,8 @@ namespace app {
 
         ImGui::Begin("Camera info");
         ImGui::Text("Camera position: (%f, %f, %f)", camera->Position.x, camera->Position.y, camera->Position.z);
+        ImGui::Text("Use WASD Space/Shift to move around");
+        ImGui::Text("Hold R to change the spotlight color to red");
         ImGui::End();
 
         graphics->end_gui();

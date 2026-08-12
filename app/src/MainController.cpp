@@ -26,6 +26,7 @@ namespace app {
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
         platform->register_platform_event_observer(std::make_unique<MainPlatformEventObserver>());
         engine::graphics::OpenGL::enable_depth_testing();
+        platform->set_enable_cursor(false);
     }
 
     bool MainController::loop() {
@@ -33,7 +34,6 @@ namespace app {
         if (platform->key(engine::platform::KeyId::KEY_ESCAPE).is_down()) {
             return false;
         }
-        platform->set_enable_cursor(false);
         return true;
     }
 
@@ -90,7 +90,8 @@ namespace app {
             -0.0036 * cos(platform->frame_time().current),
             2.0f,
             -5.0 + (-0.0067 * sin(platform->frame_time().current))));
-        shader->set_vec3("spotLight.direction", glm::vec3(cos(platform->frame_time().current), 0.0f, sin(platform->frame_time().current)));
+        shader->set_vec3("spotLight.direction",
+            glm::vec3(cos(platform->frame_time().current), 0.0f, sin(platform->frame_time().current)));
         shader->set_vec3("spotLight.ambient", glm::vec3(0.0f, 0.0f, 0.0f));
         shader->set_vec3("spotLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
         shader->set_vec3("spotLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
@@ -99,6 +100,11 @@ namespace app {
         shader->set_float("spotLight.quadratic", 0.032);
         shader->set_float("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
         shader->set_float("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
+        if (platform->key(engine::platform::KeyId::KEY_R).state() == engine::platform::Key::State::Pressed) {
+            shader->set_bool("buttonPressed", true);
+        } else {
+            shader->set_bool("buttonPressed", false);
+        }
 
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());

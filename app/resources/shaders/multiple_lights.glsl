@@ -62,6 +62,7 @@ uniform vec3 viewPos;
 uniform DirLight dirLight;
 uniform Material material;
 uniform SpotLight spotLight;
+uniform bool buttonPressed;
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
@@ -106,11 +107,22 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float epsilon = light.cutOff - light.outerCutOff;
     float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
 
-    vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords));
-    vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));
-    vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
-    ambient *= attenuation * intensity;
-    diffuse *= attenuation * intensity;
-    specular *= attenuation * intensity;
-    return (ambient + diffuse + specular);
+    if(buttonPressed){
+        vec3 ambient = vec3(1.0, 0.0, 0.0) * light.ambient * vec3(texture(material.diffuse, TexCoords));
+        vec3 diffuse = vec3(1.0, 0.0, 0.0) * light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));
+        vec3 specular = vec3(1.0, 0.0, 0.0) * light.specular * spec * vec3(texture(material.specular, TexCoords));
+        ambient *= attenuation * intensity;
+        diffuse *= attenuation * intensity;
+        specular *= attenuation * intensity;
+        return (ambient + diffuse + specular);
+    }
+    else {
+        vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords));
+        vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));
+        vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
+        ambient *= attenuation * intensity;
+        diffuse *= attenuation * intensity;
+        specular *= attenuation * intensity;
+        return (ambient + diffuse + specular);
+    }
 }
