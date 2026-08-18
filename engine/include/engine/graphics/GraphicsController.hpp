@@ -153,6 +153,12 @@ public:
         return m_ortho_params;
     }
 
+    void init_offscreen_msaa_framebuffers();
+
+    void draw_in_multisampled();
+
+    void offscreen_msaa(const resources::Shader *shader);
+
 private:
     /**
     * @brief Initializes OpenGL, ImGUI, and projection matrix params;
@@ -167,6 +173,11 @@ private:
     glm::mat4 m_projection_matrix{};
     Camera m_camera{};
     ImGuiContext *m_imgui_context{};
+
+    uint32_t quad_vao_ = 0;
+    uint32_t msaa_framebuffer_ = 0;
+    uint32_t intermediate_framebuffer_ = 0;
+    uint32_t screen_texture_ = 0;
 };
 
 /**

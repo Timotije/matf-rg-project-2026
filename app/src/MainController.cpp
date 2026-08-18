@@ -24,8 +24,10 @@ namespace app {
 
     void MainController::initialize() {
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
+        auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
         platform->register_platform_event_observer(std::make_unique<MainPlatformEventObserver>());
         engine::graphics::OpenGL::enable_depth_testing();
+        graphics->init_offscreen_msaa_framebuffers();
         platform->set_enable_cursor(false);
     }
 
@@ -194,11 +196,25 @@ namespace app {
         graphics->draw_skybox(shader, skybox);
     }
 
+    void MainController::change_buffer() {
+        auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+        graphics->draw_in_multisampled();
+    }
+
+    void MainController::use_offscreen_msaa() {
+        auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+        auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+        auto shader = resources->shader("aa_post");
+        graphics->offscreen_msaa(shader);
+    }
+
     void MainController::draw() {
+        change_buffer();
         draw_island();
         draw_lighthouse();
         draw_airballoon();
         draw_skybox();
+        use_offscreen_msaa();
     }
 
     void MainController::end_draw() {

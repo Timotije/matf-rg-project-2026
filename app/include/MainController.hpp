@@ -22,6 +22,10 @@ namespace app {
 
         void draw_skybox();
 
+        void change_buffer();
+
+        void use_offscreen_msaa();
+
         void draw() override;
 
         void end_draw() override;

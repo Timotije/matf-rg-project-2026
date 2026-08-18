@@ -11,6 +11,7 @@
 #include <engine/util/Utils.hpp>
 #include <filesystem>
 #include <stb_image.h>
+#include <engine/platform/PlatformController.hpp> // SCR_WIDTH SCR_HEIGHT
 
 namespace engine::graphics {
 int32_t OpenGL::shader_type_to_opengl_type(resources::ShaderType type) {
@@ -78,6 +79,87 @@ uint32_t OpenGL::init_skybox_cube() {
     CHECKED_GL_CALL(glEnableVertexAttribArray, 0);
     CHECKED_GL_CALL(glVertexAttribPointer, 0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);// NOLINT
     return skybox_vao;
+}
+
+OpenGL::OffscreenMSAA OpenGL::init_msaa_framebuffers() {
+    OffscreenMSAA result{};
+    auto platform = engine::core::Controller::get<platform::PlatformController>();
+
+    float quadVertices[] = {
+        // positions   // texCoords
+        -1.0f,  1.0f,  0.0f, 1.0f,
+        -1.0f, -1.0f,  0.0f, 0.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+
+        -1.0f,  1.0f,  0.0f, 1.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+         1.0f,  1.0f,  1.0f, 1.0f
+    };
+
+    uint32_t quad_vbo = 0;
+    CHECKED_GL_CALL(glGenVertexArrays, 1, &result.quad_vao);
+    CHECKED_GL_CALL(glGenBuffers, 1, &quad_vbo);
+    CHECKED_GL_CALL(glBindVertexArray, result.quad_vao);
+    CHECKED_GL_CALL(glBindBuffer, GL_ARRAY_BUFFER, quad_vbo);
+    CHECKED_GL_CALL(glBufferData, GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+    CHECKED_GL_CALL(glEnableVertexAttribArray, 0);
+    CHECKED_GL_CALL(glVertexAttribPointer, 0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void *) 0);// NOLINT
+    CHECKED_GL_CALL(glEnableVertexAttribArray, 1);
+    CHECKED_GL_CALL(glVertexAttribPointer, 1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void *) (2*sizeof(float)));// NOLINT
+
+    CHECKED_GL_CALL(glGenFramebuffers, 1, &result.framebuffer);
+    CHECKED_GL_CALL(glBindFramebuffer, GL_FRAMEBUFFER, result.framebuffer);
+
+    uint32_t textureColorBufferMultiSampled = 0;
+    CHECKED_GL_CALL(glGenTextures, 1, &textureColorBufferMultiSampled);
+    CHECKED_GL_CALL(glBindTexture, GL_TEXTURE_2D_MULTISAMPLE, textureColorBufferMultiSampled);
+    CHECKED_GL_CALL(glTexImage2DMultisample, GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGB,
+        platform->window()->width(), platform->window()->height(), GL_TRUE);
+    CHECKED_GL_CALL(glBindTexture, GL_TEXTURE_2D_MULTISAMPLE, 0);
+    CHECKED_GL_CALL(glFramebufferTexture2D, GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE,
+        textureColorBufferMultiSampled, 0);
+
+    uint32_t rbo = 0;
+    CHECKED_GL_CALL(glGenRenderbuffers, 1, &rbo);
+    CHECKED_GL_CALL(glBindRenderbuffer, GL_RENDERBUFFER, rbo);
+    CHECKED_GL_CALL(glRenderbufferStorageMultisample, GL_RENDERBUFFER, 4, GL_DEPTH24_STENCIL8,
+        platform->window()->width(),
+        platform->window()->height()
+    );
+    CHECKED_GL_CALL(glBindRenderbuffer, GL_RENDERBUFFER, 0);
+    CHECKED_GL_CALL(glFramebufferRenderbuffer, GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
+    /*
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
+    }
+    */
+
+    CHECKED_GL_CALL(glBindFramebuffer, GL_FRAMEBUFFER, 0);
+
+
+    CHECKED_GL_CALL(glGenFramebuffers, 1, &result.intermediate_framebuffer);
+    CHECKED_GL_CALL(glBindFramebuffer, GL_FRAMEBUFFER, result.intermediate_framebuffer);
+
+    CHECKED_GL_CALL(glGenTextures, 1, &result.screen_texture);
+    CHECKED_GL_CALL(glBindTexture, GL_TEXTURE_2D, result.screen_texture);
+
+    CHECKED_GL_CALL(glTexImage2D, GL_TEXTURE_2D, 0, GL_RGB, platform->window()->width(), platform->window()->height(),
+        0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+
+    CHECKED_GL_CALL(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    CHECKED_GL_CALL(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    CHECKED_GL_CALL(glFramebufferTexture2D, GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, result.screen_texture, 0);
+
+    /*
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        cout << "ERROR::FRAMEBUFFER:: Intermediate framebuffer is not complete!" << endl;
+    }
+    */
+
+    CHECKED_GL_CALL(glBindFramebuffer, GL_FRAMEBUFFER, 0);
+
+    return result;
 }
 
 bool OpenGL::shader_compiled_successfully(uint32_t shader_id) {

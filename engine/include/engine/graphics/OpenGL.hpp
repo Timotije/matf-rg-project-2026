@@ -93,6 +93,14 @@ public:
     */
     static uint32_t init_skybox_cube();
 
+    struct OffscreenMSAA {
+        uint32_t quad_vao = 0;
+        uint32_t framebuffer = 0;
+        uint32_t intermediate_framebuffer = 0;
+        uint32_t screen_texture = 0;
+    };
+
+    static OffscreenMSAA init_msaa_framebuffers();
     /**
     * @brief Check if the shader with the `shader_id` compiled successfully.
     * @returns true if the shader compilation succeeded, false otherwise.
