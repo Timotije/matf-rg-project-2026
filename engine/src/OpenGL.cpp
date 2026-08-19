@@ -126,11 +126,9 @@ OpenGL::OffscreenMSAA OpenGL::init_msaa_framebuffers() {
     CHECKED_GL_CALL(glBindRenderbuffer, GL_RENDERBUFFER, 0);
     CHECKED_GL_CALL(glFramebufferRenderbuffer, GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 
-    /*
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-            cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
-        }
-        */
+    if (CHECKED_GL_CALL(glCheckFramebufferStatus, GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        throw util::Error("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+    }
 
     CHECKED_GL_CALL(glBindFramebuffer, GL_FRAMEBUFFER, 0);
 
@@ -149,11 +147,9 @@ OpenGL::OffscreenMSAA OpenGL::init_msaa_framebuffers() {
     CHECKED_GL_CALL(glFramebufferTexture2D, GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
                     result.screen_texture, 0);
 
-    /*
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-            cout << "ERROR::FRAMEBUFFER:: Intermediate framebuffer is not complete!" << endl;
-        }
-        */
+    if (CHECKED_GL_CALL(glCheckFramebufferStatus, GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        throw util::Error("ERROR::FRAMEBUFFER:: Intermediate framebuffer is not complete!");
+    }
 
     CHECKED_GL_CALL(glBindFramebuffer, GL_FRAMEBUFFER, 0);
 

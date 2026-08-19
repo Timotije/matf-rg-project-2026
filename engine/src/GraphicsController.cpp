@@ -88,16 +88,11 @@ void GraphicsController::draw_skybox(const resources::Shader *shader, const reso
 }
 
 void GraphicsController::init_offscreen_msaa_framebuffers() {
-    auto framebuffers = engine::graphics::OpenGL::init_msaa_framebuffers();
-
-    quad_vao_ = framebuffers.quad_vao;
-    msaa_framebuffer_ = framebuffers.framebuffer;
-    intermediate_framebuffer_ = framebuffers.intermediate_framebuffer;
-    screen_texture_ = framebuffers.screen_texture;
+    m_framebuffers = engine::graphics::OpenGL::init_msaa_framebuffers();
 }
 
 void GraphicsController::draw_in_multisampled() {
-    CHECKED_GL_CALL(glBindFramebuffer, GL_FRAMEBUFFER, msaa_framebuffer_);
+    CHECKED_GL_CALL(glBindFramebuffer, GL_FRAMEBUFFER, m_framebuffers.framebuffer);
     CHECKED_GL_CALL(glClearColor, 0.1f, 0.1f, 0.1f, 1.0f);
     CHECKED_GL_CALL(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     CHECKED_GL_CALL(glEnable, GL_DEPTH_TEST);
@@ -106,8 +101,8 @@ void GraphicsController::draw_in_multisampled() {
 void GraphicsController::offscreen_msaa(const resources::Shader *shader) {
     auto platform = engine::core::Controller::get<platform::PlatformController>();
 
-    CHECKED_GL_CALL(glBindFramebuffer, GL_READ_FRAMEBUFFER, msaa_framebuffer_);
-    CHECKED_GL_CALL(glBindFramebuffer, GL_DRAW_FRAMEBUFFER, intermediate_framebuffer_);
+    CHECKED_GL_CALL(glBindFramebuffer, GL_READ_FRAMEBUFFER, m_framebuffers.framebuffer);
+    CHECKED_GL_CALL(glBindFramebuffer, GL_DRAW_FRAMEBUFFER, m_framebuffers.intermediate_framebuffer);
 
     CHECKED_GL_CALL(glBlitFramebuffer,
                     0, 0, platform->window()->width(), platform->window()->height(),
@@ -119,9 +114,9 @@ void GraphicsController::offscreen_msaa(const resources::Shader *shader) {
     CHECKED_GL_CALL(glDisable, GL_DEPTH_TEST);
 
     shader->use();
-    CHECKED_GL_CALL(glBindVertexArray, quad_vao_);
+    CHECKED_GL_CALL(glBindVertexArray, m_framebuffers.quad_vao);
     CHECKED_GL_CALL(glActiveTexture, GL_TEXTURE0);
-    CHECKED_GL_CALL(glBindTexture, GL_TEXTURE_2D, screen_texture_);
+    CHECKED_GL_CALL(glBindTexture, GL_TEXTURE_2D, m_framebuffers.screen_texture);
     CHECKED_GL_CALL(glDrawArrays, GL_TRIANGLES, 0, 6);
 }
 }// namespace engine::graphics

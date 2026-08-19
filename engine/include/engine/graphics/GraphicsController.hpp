@@ -8,6 +8,7 @@
 
 #include <engine/core/Controller.hpp>
 #include <engine/graphics/Camera.hpp>
+#include <engine/graphics/OpenGL.hpp>
 #include <engine/platform/PlatformEventObserver.hpp>
 
 struct ImGuiContext;
@@ -174,10 +175,7 @@ private:
     Camera m_camera{};
     ImGuiContext *m_imgui_context{};
 
-    uint32_t m_quad_vao_ = 0;
-    uint32_t m_msaa_framebuffer_ = 0;
-    uint32_t m_intermediate_framebuffer_ = 0;
-    uint32_t m_screen_texture_ = 0;
+    engine::graphics::OpenGL::OffscreenMSAA m_framebuffers;
 };
 
 /**
