@@ -5,7 +5,6 @@
 #include <engine/graphics/OpenGL.hpp>
 #include <engine/platform/PlatformController.hpp>
 #include <engine/resources/ResourcesController.hpp>
-#include <spdlog/spdlog.h>
 
 namespace app {
 
@@ -181,7 +180,28 @@ namespace app {
     }
 
     void MainController::update() {
+        auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
+
         update_camera();
+
+        float dt = platform->dt();
+        if (platform->key(engine::platform::KeyId::KEY_G).state() == engine::platform::Key::State::JustPressed) {
+            pressed = true;
+            timer = 0.0f;
+        }
+
+        if (pressed) {
+            timer += dt;
+
+            if (timer >= 1.0f) {
+                grayscale = true;
+            }
+            if (timer >= 5.0f) {
+                grayscale = false;
+                timer = 0.0f;
+                pressed = false;
+            }
+        }
     }
 
     void MainController::begin_draw() {
@@ -197,15 +217,21 @@ namespace app {
     }
 
     void MainController::change_buffer() {
-        auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
-        graphics->draw_in_multisampled();
+        if (grayscale) {
+            auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+            graphics->draw_in_multisampled();
+        } else {
+            engine::graphics::OpenGL::enable_depth_testing();
+        }
     }
 
     void MainController::use_offscreen_msaa() {
-        auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
-        auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
-        auto shader = resources->shader("aa_post");
-        graphics->offscreen_msaa(shader);
+        if (grayscale) {
+            auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+            auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+            auto shader = resources->shader("aa_post");
+            graphics->offscreen_msaa(shader);
+        }
     }
 
     void MainController::draw() {

@@ -30,6 +30,10 @@ namespace app {
 
         void end_draw() override;
 
+        float timer = 0.0f;
+        bool pressed = false;
+        bool grayscale = false;
+
         public:
             std::string_view name() const override {
                 return "app::MainController";

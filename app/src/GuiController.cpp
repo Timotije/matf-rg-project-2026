@@ -26,6 +26,7 @@ namespace app {
         ImGui::Text("Camera position: (%f, %f, %f)", camera->Position.x, camera->Position.y, camera->Position.z);
         ImGui::Text("Use WASD Space/Shift to move around");
         ImGui::Text("Hold R to change the spotlight color to red");
+        ImGui::Text("Press G for grayscale after 1s. Lasts for 4s.");
         ImGui::End();
 
         graphics->end_gui();
