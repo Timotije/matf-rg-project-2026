@@ -3,42 +3,42 @@
 #include <engine/core/Controller.hpp>
 
 namespace app {
-    class MainController : public engine::core::Controller {
-        void initialize() override;
+class MainController : public engine::core::Controller {
+    void initialize() override;
 
-        bool loop() override;
+    bool loop() override;
 
-        void draw_island();
+    void draw_island();
 
-        void draw_lighthouse();
+    void draw_lighthouse();
 
-        void draw_airballoon();
+    void draw_airballoon();
 
-        void update_camera();
+    void update_camera();
 
-        void update() override;
+    void update() override;
 
-        void begin_draw() override;
+    void begin_draw() override;
 
-        void draw_skybox();
+    void draw_skybox();
 
-        void change_buffer();
+    void change_buffer();
 
-        void use_offscreen_msaa();
+    void use_offscreen_msaa();
 
-        void draw() override;
+    void draw() override;
 
-        void end_draw() override;
+    void end_draw() override;
 
-        float timer    = 0.0f;
-        bool pressed   = false;
-        bool grayscale = false;
+    float m_timer = 0.0f;
+    bool m_pressed = false;
+    bool m_grayscale = false;
 
-    public:
-        std::string_view name() const override {
-            return "app::MainController";
-        };
+public:
+    std::string_view name() const override {
+        return "app::MainController";
     };
-} // namespace app
+};
+}// namespace app
 
 #endif//MATF_RG_PROJECT_MAINCONTROLLER_HPP

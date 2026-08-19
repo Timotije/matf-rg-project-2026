@@ -110,9 +110,8 @@ void GraphicsController::offscreen_msaa(const resources::Shader *shader) {
     CHECKED_GL_CALL(glBindFramebuffer, GL_DRAW_FRAMEBUFFER, intermediate_framebuffer_);
 
     CHECKED_GL_CALL(glBlitFramebuffer,
-        0, 0, platform->window()->width(), platform->window()->height(),
-        0, 0, platform->window()->width(), platform->window()->height(), GL_COLOR_BUFFER_BIT, GL_NEAREST
-    );
+                    0, 0, platform->window()->width(), platform->window()->height(),
+                    0, 0, platform->window()->width(), platform->window()->height(), GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
     CHECKED_GL_CALL(glBindFramebuffer, GL_FRAMEBUFFER, 0);
     CHECKED_GL_CALL(glClearColor, 1.0f, 1.0f, 1.0f, 1.0f);
