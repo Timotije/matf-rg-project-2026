@@ -30,15 +30,15 @@ namespace app {
 
         void end_draw() override;
 
-        float timer = 0.0f;
-        bool pressed = false;
+        float timer    = 0.0f;
+        bool pressed   = false;
         bool grayscale = false;
 
-        public:
-            std::string_view name() const override {
-                return "app::MainController";
-            };
+    public:
+        std::string_view name() const override {
+            return "app::MainController";
+        };
     };
-}// namespace app
+} // namespace app
 
 #endif//MATF_RG_PROJECT_MAINCONTROLLER_HPP

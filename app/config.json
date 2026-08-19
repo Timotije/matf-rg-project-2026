@@ -1,20 +1,20 @@
 {
   "resources": {
     "models": {
-      "island" : {
-        "path" : "floating_island/scene.gltf"
+      "island": {
+        "path": "floating_island/scene.gltf"
       },
-      "lighthouse" : {
-        "path" : "lighthouse/Lighthouse.obj"
+      "lighthouse": {
+        "path": "lighthouse/Lighthouse.obj"
       },
-      "airballoon" : {
-        "path" : "airballoon/1389_Hot_Air_Balloon.obj"
+      "airballoon": {
+        "path": "airballoon/1389_Hot_Air_Balloon.obj"
       }
     }
   },
   "window": {
     "height": 900,
-    "title": "Hello, window!",
+    "title": "Sky Lighthouse",
     "width": 1200
   }
 }

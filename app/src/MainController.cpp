@@ -7,7 +7,6 @@
 #include <engine/resources/ResourcesController.hpp>
 
 namespace app {
-
     class MainPlatformEventObserver : public engine::platform::PlatformEventObserver {
     public:
         void on_mouse_move(engine::platform::MousePosition position) override;
@@ -39,11 +38,11 @@ namespace app {
     }
 
     void MainController::draw_island() {
-        auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
-        auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
-        engine::resources::Model* island = resources->model("island");
+        auto resources                   = engine::core::Controller::get<engine::resources::ResourcesController>();
+        auto graphics                    = engine::core::Controller::get<engine::graphics::GraphicsController>();
+        engine::resources::Model *island = resources->model("island");
 
-        engine::resources::Shader* shader = resources->shader("multiple_lights");
+        engine::resources::Shader *shader = resources->shader("multiple_lights");
 
         shader->use();
         shader->set_int("material.diffuse", 0);
@@ -53,27 +52,27 @@ namespace app {
         shader->set_float("material.shininess", 64.0f);
 
         shader->set_vec3("dirLight.direction", glm::vec3(0.7f, -1.0f, -0.7f));
-        shader->set_vec3("dirLight.ambient", glm::vec3( 0.15f, 0.15f, 0.15f));
+        shader->set_vec3("dirLight.ambient", glm::vec3(0.15f, 0.15f, 0.15f));
         shader->set_vec3("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
         shader->set_vec3("dirLight.specular", glm::vec3(0.2f, 0.2f, 0.2f));
 
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
-        model = glm::scale(model, glm::vec3(0.03f));
+        model           = glm::translate(model, glm::vec3(0.0f, 0.0f, -5.0f));
+        model           = glm::scale(model, glm::vec3(0.03f));
         shader->set_mat4("model", model);
 
         island->draw(shader);
     }
 
     void MainController::draw_lighthouse() {
-        auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
-        auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
-        auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
-        engine::resources::Model* lighthouse = resources->model("lighthouse");
+        auto resources                       = engine::core::Controller::get<engine::resources::ResourcesController>();
+        auto graphics                        = engine::core::Controller::get<engine::graphics::GraphicsController>();
+        auto platform                        = engine::core::Controller::get<engine::platform::PlatformController>();
+        engine::resources::Model *lighthouse = resources->model("lighthouse");
 
-        engine::resources::Shader* shader = resources->shader("multiple_lights");
+        engine::resources::Shader *shader = resources->shader("multiple_lights");
 
         shader->use();
         shader->set_int("material.diffuse", 0);
@@ -83,16 +82,16 @@ namespace app {
         shader->set_float("material.shininess", 64.0f);
 
         shader->set_vec3("dirLight.direction", glm::vec3(0.7f, -1.0f, -0.7f));
-        shader->set_vec3("dirLight.ambient", glm::vec3( 0.15f, 0.15f, 0.15f));
+        shader->set_vec3("dirLight.ambient", glm::vec3(0.15f, 0.15f, 0.15f));
         shader->set_vec3("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
         shader->set_vec3("dirLight.specular", glm::vec3(0.2f, 0.2f, 0.2f));
 
         shader->set_vec3("spotLight.position", glm::vec3(
-            -0.0036 * cos(platform->frame_time().current),
-            2.0f,
-            -5.0 + (-0.0067 * sin(platform->frame_time().current))));
+                             -0.0036 * cos(platform->frame_time().current),
+                             2.0f,
+                             -5.0 + (-0.0067 * sin(platform->frame_time().current))));
         shader->set_vec3("spotLight.direction",
-            glm::vec3(cos(platform->frame_time().current), 0.0f, sin(platform->frame_time().current)));
+                         glm::vec3(cos(platform->frame_time().current), 0.0f, sin(platform->frame_time().current)));
         shader->set_vec3("spotLight.ambient", glm::vec3(0.0f, 0.0f, 0.0f));
         shader->set_vec3("spotLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
         shader->set_vec3("spotLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
@@ -110,20 +109,20 @@ namespace app {
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.65f, -5.0f));
-        model = glm::scale(model, glm::vec3(0.1f));
+        model           = glm::translate(model, glm::vec3(0.0f, 0.65f, -5.0f));
+        model           = glm::scale(model, glm::vec3(0.1f));
         shader->set_mat4("model", model);
 
         lighthouse->draw(shader);
     }
 
     void MainController::draw_airballoon() {
-        auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
-        auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
-        auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
-        engine::resources::Model* airballoon = resources->model("airballoon");
+        auto resources                       = engine::core::Controller::get<engine::resources::ResourcesController>();
+        auto graphics                        = engine::core::Controller::get<engine::graphics::GraphicsController>();
+        auto platform                        = engine::core::Controller::get<engine::platform::PlatformController>();
+        engine::resources::Model *airballoon = resources->model("airballoon");
 
-        engine::resources::Shader* shader = resources->shader("multiple_lights");
+        engine::resources::Shader *shader = resources->shader("multiple_lights");
 
         shader->use();
         shader->set_int("material.diffuse", 0);
@@ -133,17 +132,17 @@ namespace app {
         shader->set_float("material.shininess", 64.0f);
 
         shader->set_vec3("dirLight.direction", glm::vec3(0.7f, -1.0f, -0.7f));
-        shader->set_vec3("dirLight.ambient", glm::vec3( 0.15f, 0.15f, 0.15f));
+        shader->set_vec3("dirLight.ambient", glm::vec3(0.15f, 0.15f, 0.15f));
         shader->set_vec3("dirLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
         shader->set_vec3("dirLight.specular", glm::vec3(0.2f, 0.2f, 0.2f));
 
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(
-            2.0 * cos(platform->frame_time().current),
-            2.0f,
-            -5.0 + 2.0 * sin(platform->frame_time().current)));
+        model           = glm::translate(model, glm::vec3(
+                                   2.0 * cos(platform->frame_time().current),
+                                   2.0f,
+                                   -5.0 + 2.0 * sin(platform->frame_time().current)));
         model = glm::scale(model, glm::vec3(0.03f));
         shader->set_mat4("model", model);
 
@@ -157,8 +156,8 @@ namespace app {
         }
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
         auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
-        auto camera = graphics->camera();
-        float dt = platform->dt();
+        auto camera   = graphics->camera();
+        float dt      = platform->dt();
         if (platform->key(engine::platform::KeyId::KEY_W).is_down()) {
             camera->move_camera(engine::graphics::Camera::Movement::FORWARD, dt);
         }
@@ -187,7 +186,7 @@ namespace app {
         float dt = platform->dt();
         if (platform->key(engine::platform::KeyId::KEY_G).state() == engine::platform::Key::State::JustPressed) {
             pressed = true;
-            timer = 0.0f;
+            timer   = 0.0f;
         }
 
         if (pressed) {
@@ -198,8 +197,8 @@ namespace app {
             }
             if (timer >= 5.0f) {
                 grayscale = false;
-                timer = 0.0f;
-                pressed = false;
+                timer     = 0.0f;
+                pressed   = false;
             }
         }
     }
@@ -210,9 +209,9 @@ namespace app {
 
     void MainController::draw_skybox() {
         auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
-        auto skybox = resources->skybox("cloud_skybox");
-        auto shader = resources->shader("skybox");
-        auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+        auto skybox    = resources->skybox("cloud_skybox");
+        auto shader    = resources->shader("skybox");
+        auto graphics  = engine::core::Controller::get<engine::graphics::GraphicsController>();
         graphics->draw_skybox(shader, skybox);
     }
 
@@ -227,9 +226,9 @@ namespace app {
 
     void MainController::use_offscreen_msaa() {
         if (grayscale) {
-            auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+            auto graphics  = engine::core::Controller::get<engine::graphics::GraphicsController>();
             auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
-            auto shader = resources->shader("aa_post");
+            auto shader    = resources->shader("aa_post");
             graphics->offscreen_msaa(shader);
         }
     }
@@ -247,4 +246,4 @@ namespace app {
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
         platform->swap_buffers();
     }
-}// namespace app
+} // namespace app
